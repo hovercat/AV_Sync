@@ -1,12 +1,13 @@
 # AV_Sync
 
 ## Requirements
-numpy
-scikit-learn
-soundfile
-pandas
-ffmpeg
-nextflow
+
+- numpy
+- scikit-learn
+- soundfile
+- pandas
+- ffmpeg
+- nextflow
 
 ## Usage
 

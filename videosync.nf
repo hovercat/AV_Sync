@@ -1,19 +1,15 @@
 #!/usr/bin/env nextflow
 
-//params.videos = "in1/*.mp4"
-//params.outdir = "output/"
-//params.master = "in1/Master.ogg"
 
 master_ch = Channel.fromPath(params.master)
 video_ch = Channel.fromPath(params.videos)
 
+params.clip_duration = 30
+params.resample_div = 50
+params.bitrate = 48000
+
 
 process extract_audio {
-    publishDir params.outdir, \
-        mode: "symlink", \
-        overwrite: true, \
-        pattern: "*.flac"
-
     input:
         file(video) from video_ch
     output:
@@ -36,7 +32,7 @@ process get_error {
 
     script:
     """
-        chordlsync_geterror.py -s ${master} -i audio.flac
+        chordlsync_geterror.py -s ${master} -i audio.flac --clip-duration ${params.clip_duration} --resample-div ${params.resample_div}
     """
 }
 
@@ -65,13 +61,13 @@ process synchronize_video {
     if (error_d > 0)
         """
             ffmpeg -ss 00:00:${error_d} -i ${video} -c copy out.vid.${extension}
-            ffmpeg -i out.vid.${extension} -vn -f flac -ab $params.bitrate out.audio.flac
+            ffmpeg -i out.vid.${extension} -vn -f flac -ab ${params.bitrate} out.audio.flac
         """
     else
         """
             ffmpeg -i ${video} -itsoffset ${error_d} -i ${video} -map 0:a -map 1:v -c copy tempfile.${extension}
             ffmpeg -i tempfile.${extension} -itsoffset ${error_d} -i ${video} -map 0:v -map 1:a -c copy out.vid.${extension}
-            ffmpeg -i out.vid.${extension} -vn -f flac -ab $params.bitrate out.audio.flac
+            ffmpeg -i out.vid.${extension} -vn -f flac -ab ${params.bitrate} out.audio.flac
 
             rm tempfile.${extension}
 

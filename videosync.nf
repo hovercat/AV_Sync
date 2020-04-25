@@ -5,7 +5,7 @@ master_ch = Channel.fromPath(params.master)
 video_ch = Channel.fromPath(params.videos)
 
 params.clip_duration = 30
-params.resample_div = 50
+params.resample_div = 10
 params.bitrate = 48000
 
 

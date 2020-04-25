@@ -1,0 +1,9 @@
+.nextflow .nextflow.log .nextflow.log.1
+.git .gitignore
+in1
+output/andi.flac output/andi.mp4 output/audio.flac
+.nextflow.log .nextflow.log.1
+.nextflow.log
+.nextflow.log .nextflow.log.1
+.nextflow.log.1
+.nextflow/

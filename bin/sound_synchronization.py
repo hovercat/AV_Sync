@@ -6,9 +6,10 @@ import numpy as np
 import scipy.signal as sps
 from scipy.signal import fftconvolve, correlate
 import sklearn.preprocessing as skp
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import soundfile as sf  # https://pysoundfile.readthedocs.io/en/latest/
 import pandas as pd
+import logging
 
 def synchronize_multiple(sync, in_dir, out_dir, out_format="flac", threads=4):
     """ synchronize all files in in_dir and write to out_dir """
@@ -50,12 +51,16 @@ def _synchronize_helper(args): #sync_signal, sync_samplerate, input_file, out_fi
     out_file = args[3]
 
     with sf.SoundFile(input_file, 'r') as input_sf:
-        error_frames_input, delay, out = synchronize(sync_signal, sync_samplerate, input_sf.read(), input_sf.samplerate, out_file)
-        print("{input_file}: {delay}s".format(
-            input_file=input_file,
-            delay=delay),
-            file=sys.stdout
-        )
+        try:
+            error_frames_input, delay, out = synchronize(sync_signal, sync_samplerate, input_sf.read(), input_sf.samplerate, out_file)
+            print("{input_file}: {delay}s".format(
+                input_file=input_file,
+                delay=delay),
+                file=sys.stdout
+            )
+        except Exception as ex:
+            logging.error(ex)
+
         return input_file, error_frames_input, delay, out_file
 
 

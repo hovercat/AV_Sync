@@ -5,13 +5,6 @@ video_ch = Channel.fromPath(params.videos)
 
 video_ch.into{ video_ch1; video_ch2 }
 
-params.bitrate=48000
-params.clip_duration=25
-params.div = 100
-
-println(params.clip_duration)
-
-
 process extract_audio {
     executor 'local'
     echo true

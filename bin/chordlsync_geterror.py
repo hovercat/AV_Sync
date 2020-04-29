@@ -24,7 +24,6 @@ if not os.path.exists(args.sync_file):
     sys.exit(1)
 
 
-duration = args.clip_duration
 with sf.SoundFile(args.sync_file, 'r') as sync_file, sf.SoundFile(args.input_file, 'r') as input_sf:
     sync_signal = sync_file.read()
     singer_signal = input_sf.read()

@@ -11,8 +11,8 @@
 
 ## Usage
 
-nextflow run videosync.nf --master MASTER_FILE --videos INPUT_DIR [--outdir OUTPUT_DIR]
+nextflow run videosync.nf --master MASTER_FILE --videos "INPUT_DIR/*" [--outdir OUTPUT_DIR]
 
 or
 
-./videosync.nf --master MASTER_FILE --videos INPUT_DIR [--outdir OUTPUT_DIR]
+./videosync.nf --master MASTER_FILE --videos "INPUT_DIR/*" [--outdir OUTPUT_DIR]

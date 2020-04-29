@@ -34,12 +34,13 @@ process extract_audio {
         fi
 
         
-        if [[ \$(((height > 720 && width > 1280) || (width > 720 && height > 1280))) == 1 ]]; then
-            ffmpeg2 -threads 6 -i $video -vf scale=iw*2/3:ih*2/3 -c:v libx264 -crf 23 -c:a aac -strict -2 -ac 2 out.mp4 
+        if [ "\$height" = "1080" ] || [ "\$width" = "1080" ] || [ "\$height" = "1920" ] || [ "\$width" = "1920" ]; then
+            ffmpeg2 -threads 6 -i $video -vf scale=iw*2/3:ih*2/3 out.mp4 
            # ffmpeg2 -i $video -filter:v fps=fps=25 -vf scale=iw*2/3:ih*2/3 -c:v libx264 -crf 23 -c:a aac -strict -2 -ac 2 '${video.baseName}.720p.mp4'
         else
-            echo 2
-            ffmpeg2 -threads 6 -i $video -c:v libx264 -crf 23 -c:a aac -strict -2 -ac 2 out.mp4
+            echo 2 
+                # -c:v libx264 -crf 23 -c:a copy 
+            ffmpeg2 -threads 6 -i $video out.mp4
            # ffmpeg2 -i '$video' -filter:v fps=fps=25 -c:v libx264 -crf 23 -c:a aac -strict -2 -ac 2 '${video.baseName}.720p.mp4'
         fi
 
@@ -92,7 +93,7 @@ process synchronize_video {
             ffmpeg2 -i tempfile.${extension} -movflags faststart -itsoffset \$error -i '${video}' -map 0:v -map 1:a -c copy '${video.baseName}.sync.mp4'
             rm tempfile.${extension}
         else
-            ffmpeg2 -i $video -movflags faststart -ss \$error -c copy -map 0 '${video.baseName}.sync.mp4'
+            ffmpeg2 -i $video -movflags faststart -ss \$error -c:v libx264 -map 0 '${video.baseName}.sync.mp4'
         fi
     """
 }
